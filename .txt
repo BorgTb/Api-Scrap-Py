@@ -1,0 +1,1 @@
+se necesita hacer pip install y ademas playwright install 
