@@ -95,7 +95,6 @@ async def scrap_sii(rut, password, mes, anio):
                 return {"error": "No se encontraron selectores de año/mes"}
 
 
-            print("✅ Selectores encontrados:", anio_value, mes)
             await selects[0].select_option(anio_value)
             await page.wait_for_timeout(1000)
             await selects[1].select_option(mes)
@@ -104,11 +103,10 @@ async def scrap_sii(rut, password, mes, anio):
             
             btn = await page.query_selector('button.gwt-Button[title="Presione aquí para desplegar datos previamente ingresados para el formulario y período seleccionado."]')
             if btn:
-                print("✅ Botón encontrado")
+
                 print("Visible:", await btn.is_visible())
                 print("Enabled:", await btn.is_enabled())
-            else:
-                print("❌ Botón NO encontrado")
+            
 
             await page.click('button.gwt-Button[title="Presione aquí para desplegar datos previamente ingresados para el formulario y período seleccionado."]')
             await page.wait_for_timeout(3000)
