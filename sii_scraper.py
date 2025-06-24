@@ -102,11 +102,8 @@ async def scrap_sii(rut, password, mes, anio):
 
             
             btn = await page.query_selector('button.gwt-Button[title="Presione aquí para desplegar datos previamente ingresados para el formulario y período seleccionado."]')
-            if btn:
-
-                print("Visible:", await btn.is_visible())
-                print("Enabled:", await btn.is_enabled())
-            
+           
+         
 
             await page.click('button.gwt-Button[title="Presione aquí para desplegar datos previamente ingresados para el formulario y período seleccionado."]')
             await page.wait_for_timeout(3000)
@@ -138,7 +135,7 @@ async def scrap_sii(rut, password, mes, anio):
             print("✅ Folio encontrado:", folio)
 
 
-        
+
 
             return {
                 "folio": folio,
