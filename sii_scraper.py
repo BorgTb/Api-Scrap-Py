@@ -116,7 +116,7 @@ async def scrap_sii(rut, password, mes, anio):
                 return {"error": "No se encontró el folio"}
 
             # Evaluar estado del folio
-            if folio == "Guardado":
+            if folio == "Guardada":
                 return {"error": "No se ha pagado el SII"}
             elif folio == "Ver:":
                 return {"error": "El pago se encuentra en proceso"}
@@ -130,9 +130,7 @@ async def scrap_sii(rut, password, mes, anio):
                 await page.wait_for_timeout(3000)
                 remanente = extraer_remanente(await page.content())
             
-            print("✅ Remanente encontrado:", remanente)
-            print("✅ Monto encontrado:", monto)
-            print("✅ Folio encontrado:", folio)
+
 
 
 

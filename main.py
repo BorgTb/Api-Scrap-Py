@@ -2,19 +2,22 @@ import asyncio
 from sii_scraper import scrap_sii
 import httpClient as http
 
-async def run_scrap_for_user(user):
-    rut = user["rut"]
-    clave = user["clave"]
-    # Puedes definir mes/año como variables o pasarlos desde `user`
-    mes = "4"
-    anio = "2025"
+semaphore = asyncio.Semaphore(3)  # Solo 3 tareas a la vez
 
-    try:
-        result = await scrap_sii(rut, clave, mes, anio)
-        print(f"✅ Resultado para {rut}: {result}")
-        # Aquí puedes enviar el resultado al servidor si lo deseas
-    except Exception as e:
-        print(f"❌ Error para {rut}: {e}")
+async def run_scrap_for_user(user):
+    async with semaphore:
+        rut = user["rut"]
+        clave = user["clave"]
+        mes = "4"
+        anio = "2025"
+
+        try:
+            result = await scrap_sii(rut, clave, mes, anio)
+            print(result)
+            res = http.sendDataToServer(rut, result, mes, anio)
+            print(f"✅ Resultado para {rut}: {res.text}")
+        except Exception as e:
+            print(f"❌ Error para {rut}: {e}")
 
 
 
@@ -40,6 +43,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
+    #res = http.sendDataToServer()
+    #print(f"Respuesta del servidor: {res}")
     
    
