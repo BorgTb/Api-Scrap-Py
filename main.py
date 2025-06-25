@@ -2,13 +2,20 @@ import asyncio
 from sii_scraper import scrap_sii
 import httpClient as http
 
-semaphore = asyncio.Semaphore(3)  # Solo 3 tareas a la vez
+semaphore = asyncio.Semaphore()  # Solo 3 tareas a la vez
+
+def formatear_mes_actual():
+    from datetime import datetime
+    print(datetime.now().month)
+    mes_actual = datetime.now().month - 2 # Restar 1 para obtener el mes anterior restando 1 para formato del sii
+    #mes_actual = mes - 1  # Restar 1 para obtener el mes anterior restando 1 para formato del sii
+    return str(mes_actual) if mes_actual >= 0 else "0"  # Asegurarse de que sea un stringes
 
 async def run_scrap_for_user(user):
     async with semaphore:
         rut = user["rut"]
         clave = user["clave"]
-        mes = "4"
+        mes = formatear_mes_actual() # debe ser el anterior al mes actual pero restandole 1, es decir, enero = 0, febrero = 1, marzo = 2, abril = 3, mayo = 4, junio = 5, julio = 6, agosto = 7, septiembre = 8, octubre = 9, noviembre = 10, diciembre = 11
         anio = "2025"
 
         try:
