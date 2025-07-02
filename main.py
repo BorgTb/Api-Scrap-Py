@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 from sii_scraper import scrap_sii
 import httpClient as http
 
@@ -17,14 +18,14 @@ async def run_scrap_for_user(user):
         clave = user["clave"]
         mes = formatear_mes_actual() # debe ser el anterior al mes actual pero restandole 1, es decir, enero = 0, febrero = 1, marzo = 2, abril = 3, mayo = 4, junio = 5, julio = 6, agosto = 7, septiembre = 8, octubre = 9, noviembre = 10, diciembre = 11
         anio = "2025"
-
+        print(f"🔍 Procesando RUT: {rut}, Mes: {mes}, Año: {anio}")
         try:
             result = await scrap_sii(rut, clave, mes, anio)
             print(result)
             res = http.sendDataToServer(rut, result, mes, anio)
-            print(f"✅ Resultado para {rut}: {res.text}")
+            print(f"✅ Resultado para {rut}: {res.text} Revisado el dia {datetime.now().strftime('%d/%m/%Y')}" )
         except Exception as e:
-            print(f"❌ Error para {rut}: {e}")
+            print(f"❌ Error para {rut}: {e} Revisado el dia {datetime.now().strftime('%d/%m/%Y')}")
 
 
 
@@ -51,6 +52,9 @@ def main():
 if __name__ == "__main__":
     main()
     #res = http.sendDataToServer()
+    #data = http.getUserData()
+    #print(data)
+    #asyncio.run(run_scrap_for_user({"rut": "10.801.551-9", "clave": "Vaca9801"}))
     #print(f"Respuesta del servidor: {res}")
     
    
