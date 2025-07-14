@@ -1,0 +1,9 @@
+
+services:
+  fastapi_app:
+    build: .
+    ports:
+      - "55055:55055"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always
