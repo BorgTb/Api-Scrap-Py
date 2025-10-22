@@ -67,7 +67,7 @@ async def scrap_sii(rut, password, mes, anio):
 
         try:
             # 1. Ir a login
-            await page.goto("https://zeusr.sii.cl/AUT2000/InicioAutenticacion/IngresoRutClave.html")
+            await page.goto("https://zeusr.sii.cl//AUT2000/InicioAutenticacion/IngresoRutClave.html?https://misiir.sii.cl/cgi_misii/siihome.cgi")
             await page.fill("#rutcntr", rut)
             await page.fill("#clave", password)
             await page.click("#bt_ingresar")

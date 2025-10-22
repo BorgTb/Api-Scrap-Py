@@ -1,5 +1,5 @@
 # Imagen base oficial y liviana
-FROM python:3.11-slim
+FROM python:3.11-slim-bookworm
 
 # Variables de entorno (opcional)
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -11,7 +11,7 @@ WORKDIR /app
 # Instalar dependencias del sistema necesarias para Playwright
 RUN apt-get update && apt-get install -y \
     wget gnupg curl ca-certificates fonts-liberation libasound2 libatk1.0-0 \
-    libatk-bridge2.0-0 libcups2 libdbus-1-3 libgdk-pixbuf2.0-0 libnspr4 \
+    libatk-bridge2.0-0 libcups2 libdbus-1-3 libgdk-pixbuf-2.0-0 libnspr4 \
     libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 xdg-utils \
     libgbm1 libgtk-3-0 libxss1 libxshmfence1 libglu1-mesa libpango-1.0-0 \
     libxinerama1 libxext6 libxfixes3 libx11-6 libxcb1 libxtst6 libnss3-tools \
