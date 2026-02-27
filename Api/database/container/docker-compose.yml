@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  redis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    restart: unless-stopped
+    # Configuración de Redis:
+    # --appendonly yes: Persistencia de datos
+    # --requirepass test: Contraseña de acceso
+    # --notify-keyspace-events Ex: Notificaciones de expiración para el listener
+    command: redis-server --appendonly yes --requirepass test --notify-keyspace-events Ex
+    networks:
+      - redis-network
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    environment:
+      # Configuración para que aparezca la conexión apenas abras la web
+      - RI_APP_REDIS_URL=redis://:test@redis:6379
+    networks:
+      - redis-network
+    depends_on:
+      - redis
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  redis-network:
+    driver: bridge
