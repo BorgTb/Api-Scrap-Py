@@ -1020,6 +1020,65 @@ async def obtener_datos_rcv(data: UserSIIData, token_recaptcha: str = TOKEN_RECA
     )
 
 
+async def obtener_datos_rcv_anual(data, token_recaptcha: str = TOKEN_RECAPTCHA_DEFAULT):
+    """
+    Obtiene datos RCV de todos los periodos de un año.
+    
+    Args:
+        data: UserSIIDataAnual con rut, dv, password, anio
+        token_recaptcha: Token de recaptcha
+    
+    Returns:
+        Diccionario con estructura:
+        {
+            "empresa": {"rut": "XXXXX-X", "anio": "YYYY"},
+            "periodos": {
+                "YYYYMM": {
+                    "compras": {...},
+                    "ventas": {...},
+                    "empresa": {...}
+                },
+                ...
+            }
+        }
+    """
+    resultado = {
+        "empresa": {
+            "rut": f"{data.rut}-{data.dv}",
+            "anio": data.anio
+        },
+        "periodos": {}
+    }
+    
+    # Iterar por todos los meses del año
+    for mes in range(1, 13):
+        periodo = f"{data.anio}{str(mes).zfill(2)}"
+        print(f"\n📅 Consultando periodo: {periodo}")
+        
+        try:
+            # Obtener datos del periodo
+            datos_periodo = obtener_registros_cv(
+                rut=data.rut,
+                dv=data.dv,
+                clave=data.password,
+                periodo=periodo,
+                token_recaptcha=token_recaptcha
+            )
+            
+            if datos_periodo and "error" not in datos_periodo:
+                resultado["periodos"][periodo] = datos_periodo
+                print(f"✅ Periodo {periodo} obtenido exitosamente")
+            else:
+                resultado["periodos"][periodo] = datos_periodo if datos_periodo else {"error": "No se pudieron obtener datos"}
+                print(f"⚠️ Error en periodo {periodo}")
+                
+        except Exception as e:
+            print(f"❌ Error al consultar periodo {periodo}: {str(e)}")
+            resultado["periodos"][periodo] = {"error": str(e)}
+    
+    return resultado
+
+
 # ==================== MAIN ====================
 
 if __name__ == "__main__":

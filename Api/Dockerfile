@@ -34,4 +34,7 @@ RUN find . -type d -name "__pycache__" -exec rm -r {} +
 EXPOSE 55055
 
 # Comando de ejecución para producción
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:55055"]
+# --timeout 300: Timeout de 5 minutos para consultas largas (12 periodos × ~10 peticiones)
+# --workers 2: Múltiples workers para manejar más peticiones concurrentes
+# --graceful-timeout 300: Tiempo para terminar peticiones en curso antes de forzar shutdown
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:55055", "--timeout", "300", "--workers", "2", "--graceful-timeout", "300"]

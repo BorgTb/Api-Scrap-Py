@@ -27,6 +27,15 @@ class UserSIIData(BaseModel):
     anio: str
     json_output: bool = Field(default=False, alias="json")
 
+class UserSIIDataAnual(BaseModel):
+    """Modelo para consultar datos de todo un año"""
+    model_config = ConfigDict(populate_by_name=True)
+    rut: str
+    dv: str
+    password: str
+    anio: str
+    token_recaptcha: Optional[str] = "1111111ww"
+
 class SessionCache(BaseModel):
     token: str
     csessionid: str

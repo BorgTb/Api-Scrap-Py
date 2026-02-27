@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response
-from models.ScrapeRequest import ScrapeRequest, UserSIIData, UserSii, SessionRequest
+from models.ScrapeRequest import ScrapeRequest, UserSIIData, UserSii, SessionRequest, UserSIIDataAnual
 from services import ScrapSii, f29_service, RCV_service
 from utils.sesion_cache import obtener_ttl_sesion
 from utils.login_sii import cerrar_sesion
@@ -32,6 +32,20 @@ async def obtener_datos_rcv(data: UserSIIData):
     if isinstance(result, dict) and "error" in result:
         return result
     return {"rcv_data": result}
+
+@router.post("/v2/sii/data/rcv/anual")
+async def obtener_datos_rcv_anual(data: UserSIIDataAnual):
+    """
+    Obtiene el resumen de todos los periodos de un año.
+    
+    Args:
+        data: UserSIIDataAnual con rut, dv, password, anio
+    
+    Returns:
+        Diccionario con todos los periodos del año y sus datos
+    """
+    result = await RCV_service.obtener_datos_rcv_anual(data)
+    return result
 
 @router.post("/v2/sii/session/close")
 async def cerrar_sesion_endpoint(session_req: SessionRequest):
