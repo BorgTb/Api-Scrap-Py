@@ -1,9 +1,52 @@
 
+version: '3.8'
+
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./database/container/redis-data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass test --notify-keyspace-events Ex
+    networks:
+      - app-network
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    environment:
+      - RI_APP_REDIS_URL=redis://:test@redis:6379
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
   fastapi_app:
     build: .
+    container_name: fastapi-app
     ports:
       - "55055:55055"
     environment:
       - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=test
+    networks:
+      - app-network
+    depends_on:
+      - redis
     restart: always
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

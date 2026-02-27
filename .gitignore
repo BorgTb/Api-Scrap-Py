@@ -125,3 +125,8 @@ dmypy.json
 
 # PyCharm
 .idea/
+
+
+./Api/database/Dockerfile
+./Api/database/docker-compose.yml
+./Api/database/container/redis-data/*
