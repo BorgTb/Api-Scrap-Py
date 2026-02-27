@@ -99,7 +99,7 @@ async def obtener_datos_f29(data: UserSIIData):
     
     clean_xml = limpiar_respuesta_sii_ultra(f29Response.text)
 
-    if data.json:
+    if data.json_output:
         try:
             xml_dict = xml_a_json(clean_xml)
             return xml_dict['FormularioRfi']  # Retornar solo el bloque relevante
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         password='teleme662',
         mes='1',
         anio='2026',
-        json=False
+        json_output=False
     )
     result = obtener_datos_f29(test)
     print(result)

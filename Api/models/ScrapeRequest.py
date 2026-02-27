@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
 class ScrapeRequest(BaseModel):
@@ -18,12 +18,14 @@ class SessionRequest(BaseModel):
     dv: str
 
 class UserSIIData(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     rut: str
     dv: str
     password: str
     mes: str
     anio: str
-    json: bool = False
+    json_output: bool = Field(default=False, alias="json")
 
 class SessionCache(BaseModel):
     token: str
